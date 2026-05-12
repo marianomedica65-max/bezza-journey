@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Camino feliz · Comercio Bezza Pay</title>
+<style>
+  :root {
+    /* Paleta Bezza */
+    --rojo: #F30027;
+    --verde-bancor: #005F5A;
+    --violeta: #C315AB;
+    --verde-brillante: #CAF14D;
+    --magenta: #D00070;
+    --verde-claro: #D4F8D9;
+
+    --bg: #FAFAFA;
+    --surface: #FFFFFF;
+    --cream: #F5F4F1;
+    --border: rgba(0,0,0,0.10);
+    --border-strong: rgba(0,0,0,0.22);
+    --text: #1A1A24;
+    --text-2: #5C5C6B;
+    --text-3: #9090A0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 24px 16px 80px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .header-logo {
+    background: var(--violeta);
+    color: white;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px;
+    letter-spacing: -1px;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin: 0; color: var(--text); }
+  .subtitle { font-size: 13.5px; color: var(--text-2); margin: 0 0 8px 52px; }
+
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    font-size: 12px; color: var(--text-2); margin: 14px 0 24px;
+    padding: 10px 14px; background: var(--cream); border-radius: 10px;
+  }
+
+  /* ============ JOURNEY WAVE ============ */
+  .journey {
+    position: relative;
+    background: linear-gradient(135deg, var(--violeta) 0%, var(--magenta) 100%);
+    border-radius: 18px 18px 0 0;
+    padding: 36px 24px 48px;
+    overflow: visible;
+    color: white;
+  }
+  .journey-title {
+    font-size: 26px; font-weight: 700;
+    color: white; margin: 0 0 28px;
+    text-align: center;
+    letter-spacing: -0.5px;
+  }
+  .wave {
+    position: relative;
+    height: 320px;
+  }
+  .wave svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+  .stages {
+    position: relative; z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    height: 100%;
+  }
+  .stage {
+    display: flex; flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+  }
+  .stage.up { justify-content: flex-start; padding-top: 8px; }
+  .stage.down { justify-content: flex-end; padding-bottom: 8px; }
+
+  .stage-bubble {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.20);
+    position: relative;
+    z-index: 3;
+  }
+  .stage-num {
+    position: absolute;
+    top: -8px; right: -8px;
+    width: 26px; height: 26px;
+    background: var(--verde-brillante);
+    color: var(--text);
+    border-radius: 50%;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid white;
+  }
+  .stage-name {
+    font-size: 13px; font-weight: 600;
+    color: white;
+    margin: 10px 0 4px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .stage-when {
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* ============ ACTIONS BLOCK ============ */
+  .actions {
+    background: white;
+    border-radius: 0 0 18px 18px;
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+  .ac-title {
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--text-2);
+    margin: 0 0 4px;
+  }
+  .ac-subtitle {
+    font-size: 12px;
+    color: var(--text-3);
+    margin: 0 0 16px;
+  }
+  .ac-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+  .ac-col {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .ac-col-label {
+    font-size: 10px; font-weight: 700;
+    color: var(--text-3);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--border);
+    line-height: 1.2;
+  }
+
+  /* ============ PILLS = ACCIONES ============ */
+  .pill {
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    border: 1.5px solid var(--violeta);
+    background: white;
+    color: var(--violeta);
+    transition: all 0.12s;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  .pill:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.10); }
+  .pill.active { background: var(--violeta); color: white; }
+
+  /* Hint del equipo en chiquito dentro de la pastilla */
+  .pill .team {
+    display: block;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  /* ============ POPOVER ============ */
+  .popover {
+    position: absolute;
+    z-index: 50;
+    background: white;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    padding: 18px 20px;
+    width: 360px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.22);
+    font-size: 13px;
+    line-height: 1.55;
+    pointer-events: auto;
+  }
+  .popover .arrow-up {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: white;
+    transform: rotate(45deg);
+  }
+  .popover .close {
+    position: absolute;
+    top: 8px; right: 10px;
+    cursor: pointer;
+    color: var(--text-3);
+    font-size: 18px;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .popover .close:hover { color: var(--text); }
+
+  .pop-tag {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+    display: inline-block; margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    background: var(--violeta);
+    color: white;
+  }
+  .pop-title {
+    font-size: 16px; font-weight: 700;
+    margin: 0 0 8px; padding-right: 24px;
+    color: var(--text);
+  }
+  .pop-lead {
+    margin: 0 0 14px;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Tabla taxonómica */
+  .pop-tax {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 6px 10px;
+    margin: 0 0 14px;
+    padding: 12px;
+    background: var(--cream);
+    border-radius: 8px;
+  }
+  .pop-tax dt {
+    font-size: 10px; font-weight: 700;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding-top: 1px;
+  }
+  .pop-tax dd {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .pop-fortpain {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .pop-fort, .pop-pain {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .pop-fort {
+    background: var(--verde-claro);
+    color: #1a4d22;
+  }
+  .pop-pain {
+    background: #FFE8EC;
+    color: #8B0020;
+  }
+  .pop-fort strong, .pop-pain strong { font-weight: 700; }
+
+  .pop-section-title {
+    font-size: 10px; font-weight: 700;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 12px 0 4px;
+  }
+  .popover ul {
+    margin: 0; padding-left: 16px;
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+
+  .branch-note {
+    margin-top: 18px;
+    background: #FFF4D6;
+    color: #6B4F00;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    border-left: 3px solid #B8870A;
+  }
+  .footnote {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: var(--cream);
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: var(--text-2);
+  }
+
+  @media (max-width: 900px) {
+    .stages, .ac-grid { grid-template-columns: repeat(7, 130px); overflow-x: auto; }
+    .journey { padding: 24px 16px 32px; }
+    .actions { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <span class="header-logo">B</span>
+  <h1>Camino feliz · Comercio Bezza Pay</h1>
+</div>
+<p class="subtitle">Comercio mediano que ya cobra con MP. Cada pastilla es una <strong>acción del journey</strong>. Tocala para ver equipo, touchpoint, herramienta, proveedor, fortalezas y pains.</p>
+
+<!-- ===== JOURNEY WAVE ===== -->
+<div class="journey">
+  <h2 class="journey-title">Customer Journey</h2>
+
+  <div class="wave">
+    <svg viewBox="0 0 1100 320" preserveAspectRatio="none">
+      <path d="M 50,160 Q 130,40 230,160 T 410,160 T 590,160 T 770,160 T 950,160 T 1130,160"
+            fill="none" stroke="white" stroke-width="3" stroke-dasharray="8 6" opacity="0.7"/>
+    </svg>
+
+    <div class="stages">
+      <div class="stage up">
+        <div class="stage-bubble">📣<span class="stage-num">1</span></div>
+        <div class="stage-name">Discovery</div>
+        <div class="stage-when">Pre-lead</div>
+      </div>
+      <div class="stage down">
+        <div class="stage-name">Capta lead</div>
+        <div class="stage-when">Día 0</div>
+        <div class="stage-bubble" style="margin-top:8px">📝<span class="stage-num">2</span></div>
+      </div>
+      <div class="stage up">
+        <div class="stage-bubble">🎧<span class="stage-num">3</span></div>
+        <div class="stage-name">Asesora</div>
+        <div class="stage-when">Día 0–3</div>
+      </div>
+      <div class="stage down">
+        <div class="stage-name">Cierra venta</div>
+        <div class="stage-when">Día 1–3</div>
+        <div class="stage-bubble" style="margin-top:8px">✅<span class="stage-num">4</span></div>
+      </div>
+      <div class="stage up">
+        <div class="stage-bubble">📨<span class="stage-num">5</span></div>
+        <div class="stage-name">Activación temprana</div>
+        <div class="stage-when">Solo Inbound · D 3–15</div>
+      </div>
+      <div class="stage down">
+        <div class="stage-name">CS Bienvenida</div>
+        <div class="stage-when">Día 7–30</div>
+        <div class="stage-bubble" style="margin-top:8px">💬<span class="stage-num">6</span></div>
+      </div>
+      <div class="stage up">
+        <div class="stage-bubble">🔄<span class="stage-num">7</span></div>
+        <div class="stage-name">Operación plena</div>
+        <div class="stage-when">Día 30+</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACTIONS GRID ===== -->
+<div class="actions">
+  <div class="ac-title">Acciones por etapa</div>
+  <div class="ac-subtitle">Cada pastilla es una acción concreta del journey. Tocala para ver el detalle.</div>
+
+  <div class="ac-grid">
+
+    <!-- 1 Discovery -->
+    <div class="ac-col">
+      <div class="ac-col-label">1. Discovery</div>
+      <button class="pill" data-k="d1">Campañas en redes <span class="team">Marketing · 80%</span></button>
+      <button class="pill" data-k="d2">Visita en comercio <span class="team">Terreno</span></button>
+      <button class="pill" data-k="d3">Comentario en sucursal <span class="team">Bancor</span></button>
+      <button class="pill" data-k="d4">Acción con cámara <span class="team">Marketing</span></button>
+    </div>
+
+    <!-- 2 Capta lead -->
+    <div class="ac-col">
+      <div class="ac-col-label">2. Capta lead</div>
+      <button class="pill" data-k="c1">Llega vía formulario <span class="team">Marketing</span></button>
+      <button class="pill" data-k="c2">Llega vía WhatsApp <span class="team">Inbound</span></button>
+      <button class="pill" data-k="c3">Se crea el deal en CRM <span class="team">CRM · Inbound</span></button>
+    </div>
+
+    <!-- 3 Asesora -->
+    <div class="ac-col">
+      <div class="ac-col-label">3. Asesora</div>
+      <button class="pill" data-k="a1">Asesora vía chat <span class="team">Inbound</span></button>
+      <button class="pill" data-k="a2">Asesora vía llamada <span class="team">Inbound</span></button>
+      <button class="pill" data-k="a3">Asesora cara a cara <span class="team">Terreno</span></button>
+    </div>
+
+    <!-- 4 Cierra venta -->
+    <div class="ac-col">
+      <div class="ac-col-label">4. Cierra venta</div>
+      <button class="pill" data-k="v1">Validación biométrica <span class="team">Comercio · Inbound</span></button>
+      <button class="pill" data-k="v2">Elige plazo de acreditación <span class="team">Comercio · Sales</span></button>
+      <button class="pill" data-k="v3">Carga del alta y cierre del deal <span class="team">Sales</span></button>
+    </div>
+
+    <!-- 5 Activación temprana -->
+    <div class="ac-col">
+      <div class="ac-col-label">5. Activ. temprana</div>
+      <button class="pill" data-k="t1">Recibe flujo de mails <span class="team">Marketing automation</span></button>
+      <button class="pill" data-k="t2">Cobra con QR · link · tap <span class="team">Comercio</span></button>
+      <button class="pill" data-k="t3">Espera entrega del SmartPOS <span class="team">Ops · OCASA</span></button>
+    </div>
+
+    <!-- 6 CS -->
+    <div class="ac-col">
+      <div class="ac-col-label">6. CS Bienvenida</div>
+      <button class="pill" data-k="b1">Recibe bienvenida de CS <span class="team">Customer Success</span></button>
+      <button class="pill" data-k="b2">Configura SmartPOS y app <span class="team">CS · Comercio</span></button>
+      <button class="pill" data-k="b3">Hace primera venta real <span class="team">Comercio · CS empuja</span></button>
+    </div>
+
+    <!-- 7 Operación -->
+    <div class="ac-col">
+      <div class="ac-col-label">7. Operación plena</div>
+      <button class="pill" data-k="o1">Recibe primera liquidación <span class="team">Ops · Bancor</span></button>
+      <button class="pill" data-k="o2">Cobra todos los días <span class="team">Comercio</span></button>
+      <button class="pill" data-k="o3">Pide soporte ante problemas <span class="team">Bot · ATC · CS</span></button>
+    </div>
+
+  </div>
+
+  <div class="branch-note">
+    🔀 <strong>Bifurcación en la etapa 4:</strong> los de Inbound pasan por la etapa 5 mientras OCASA entrega el SmartPOS. Los de Terreno reciben el SmartPOS en mano y saltan directo a la etapa 6. <strong>Las dos vías convergen en CS.</strong>
+  </div>
+</div>
+
+<div class="footnote">
+  💡 Esta es la primera de tres piezas del set de journeys del hub: <strong>Bezza Pay (comercio)</strong> · <strong>Bezza Billetera (consumidor)</strong> · <strong>Bezza Pass (ticketera)</strong>.
+</div>
+
+</div>
+
+<!-- Popover -->
+<div class="popover" id="popover" style="display:none;">
+  <button class="close" onclick="closePop()">×</button>
+  <div class="arrow-up" id="pop-arrow"></div>
+  <div id="pop-content"></div>
+</div>
+
+<script>
+// Cada acción = pastilla. Estructura:
+// s = etapa, t = título de la acción, l = qué pasa
+// tax = {Equipo, Touchpoint, Herramienta, Proveedor, Sistema CRM, etc.}
+// fort = fortalezas, pain = pains, w = qué incluye / detalle operativo
+
+const D = {
+  // ===== 1. DISCOVERY =====
+  'd1': {s:'1 · Discovery', t:'Campañas en redes',
+    l:'El comercio descubre Bezza Pay a través de contenido orgánico/paga en redes (TOFU/MOFU/BOFU), segmentado por rubro y promo.',
+    tax:[['Equipo','Marketing'],['Touchpoint','Feed redes sociales'],['Herramienta','Meta Ads'],['Proveedor','WOBRA (agencia)'],['Geografía','Solo Córdoba']],
+    fort:'Genera el 80% de las altas. Mensaje ancla: respaldo Bancor + arancel + SmartPOS gratis + todos los medios + Cordobesa/NX.',
+    pain:'Volumen alto pero conversión media. Comercio "tibio" se diluye antes del cierre. La fragmentación de mensaje por rubro depende de calendario de promos.',
+    w:['Contenido segmentado por rubro y promo vigente (electro, indumentaria, frecuencia diaria)','Click destino: formulario HubSpot o WhatsApp directo','La pauta y creatividad la gestiona WOBRA']},
+
+  'd2': {s:'1 · Discovery', t:'Visita en comercio',
+    l:'Un vendedor de terreno visita comercios identificados, presenta el producto cara a cara y arranca el alta en el momento.',
+    tax:[['Equipo','Equipo Terreno'],['Touchpoint','Visita presencial'],['Herramienta','Notebook/tablet del vendedor'],['Proveedor','Interno']],
+    fort:'La conversión más alta del journey por el componente humano y la posibilidad de demo + entrega del SmartPOS en la misma visita.',
+    pain:'Volumen bajo y costo por contacto alto. No escala fácil.',
+    w:['Visita personalizada','Demo presencial inmediata','Captura datos in situ y arma el alta en el momento']},
+
+  'd3': {s:'1 · Discovery', t:'Comentario en sucursal Bancor',
+    l:'El comercio se acerca a una sucursal Bancor por otra gestión y ahí escucha mencionar Bezza Pay (informalmente).',
+    tax:[['Equipo','Personal sucursal Bancor'],['Touchpoint','Sucursal física'],['Herramienta','—'],['Proveedor','Bancor']],
+    fort:'Llega con respaldo del banco como marco de confianza inicial.',
+    pain:'Hoy es debilidad: el personal no conoce bien el producto y muchas veces ofrecen Fiserv en paralelo. Conflicto de canal interno.',
+    w:['Personal Bancor con poca capacitación en Bezza Pay','Conflicto con producto Fiserv','Oportunidad: capacitación urgente al personal de sucursal']},
+
+  'd4': {s:'1 · Discovery', t:'Acción con cámara o entidad',
+    l:'Acciones puntuales con cámaras de comercio u otras entidades que agrupan rubros. Estacional.',
+    tax:[['Equipo','Marketing + Sales'],['Touchpoint','Evento / mailing de la cámara'],['Herramienta','Acuerdos puntuales'],['Proveedor','Cámara o entidad']],
+    fort:'Permite captar varios comercios del mismo rubro en una sola acción, con el endoso de la entidad.',
+    pain:'Estacional, depende del calendario externo. Bajo volumen total.',
+    w:['Eventos o campañas conjuntas','Capta comercios cualificados','Volumen bajo pero alta cualificación']},
+
+  // ===== 2. CAPTA LEAD =====
+  'c1': {s:'2 · Capta lead', t:'Llega vía formulario',
+    l:'El comercio hace clic en una campaña y completa un formulario con sus datos. Es la puerta de entrada con menos fricción operativa para nosotros.',
+    tax:[['Equipo','Marketing'],['Touchpoint','Formulario web'],['Herramienta','HubSpot Forms'],['Proveedor','HubSpot']],
+    fort:'Genera el deal en HubSpot **automáticamente** apenas se completa. Datos estructurados desde el primer contacto.',
+    pain:'Más fricción para el comercio que un WhatsApp directo (escribir en un form vs mandar mensaje).',
+    w:['Form corto: nombre, comercio, rubro, contacto','Validación automática de datos','Trigger del deal en CRM sin intervención humana']},
+
+  'c2': {s:'2 · Capta lead', t:'Llega vía WhatsApp',
+    l:'El comercio hace clic en una campaña y arranca conversación directa por WhatsApp. Es la puerta con menos fricción para el comercio.',
+    tax:[['Equipo','Equipo Inbound'],['Touchpoint','Chat WhatsApp'],['Herramienta','Botmaker'],['Proveedor','Botmaker']],
+    fort:'Mínima fricción para el comercio. Conversación inmediata, sensación de atención humana desde el inicio.',
+    pain:'⚠️ Botmaker **no integra con HubSpot** hoy. El deal NO se crea automáticamente: el asesor de Inbound lo carga manualmente y solo cuando lo gana. Limitación operativa importante.',
+    w:['Botón "Enviar mensaje" desde el anuncio','Conversación arranca en Botmaker','Carga manual del deal en HubSpot solo al cierre ganado','Oportunidad: integración Botmaker ↔ HubSpot']},
+
+  'c3': {s:'2 · Capta lead', t:'Se crea el deal en CRM',
+    l:'Hito intermedio: el lead se transforma en un deal dentro del pipeline comercial. Acá los dos caminos (form y WhatsApp) se comportan distinto.',
+    tax:[['Equipo','CRM · Inbound'],['Touchpoint','Backend, no visible al comercio'],['Herramienta','HubSpot'],['Proveedor','HubSpot']],
+    fort:'Pipeline trazable. Una vez cerrado el deal como ganado, el handoff a CS es automático y dispara también el flujo Emblue.',
+    pain:'Los deals que vienen por WhatsApp se cargan tarde en el funnel (recién al cierre), entonces no hay visibilidad real del top of funnel conversacional.',
+    w:['Form → deal automático','WhatsApp → carga manual al cierre ganado','Handoff a CS automático','Trigger automático del flujo Emblue']},
+
+  // ===== 3. ASESORA =====
+  'a1': {s:'3 · Asesora', t:'Asesora vía chat',
+    l:'El equipo Inbound asesora al comercio por WhatsApp con un script estructurado. Es el canal principal de asesoramiento inbound.',
+    tax:[['Equipo','Equipo Inbound'],['Touchpoint','WhatsApp'],['Herramienta','Botmaker'],['Proveedor','Botmaker'],['Script','Sí, estructurado']],
+    fort:'Asincrónico: el comercio responde cuando puede. Discurso alineado con terreno. +3 contactos en promedio para cerrar.',
+    pain:'No integra con HubSpot. Sin visibilidad de etapa del lead hasta que se gana. Si el comercio no responde, se pierde el rastro.',
+    w:['Script estructurado','Manejo de objeciones (MP, "lo estoy pensando", inercia del cambio)','+3 contactos en promedio para cerrar']},
+
+  'a2': {s:'3 · Asesora', t:'Asesora vía llamada',
+    l:'Cuando WhatsApp no avanza, el equipo Inbound levanta el teléfono y llama. Canal complementario al chat.',
+    tax:[['Equipo','Equipo Inbound'],['Touchpoint','Llamada telefónica'],['Herramienta','Omnileads'],['Proveedor','Omnileads']],
+    fort:'Llamadas grabadas. Permite recuperar leads que se enfriaron en chat. Tono más cercano y persuasivo.',
+    pain:'Costo por contacto más alto. Algunos comercios prefieren no atender llamadas desconocidas.',
+    w:['Llamadas grabadas','Asignación automática al asesor','Útil cuando el lead no responde por WhatsApp']},
+
+  'a3': {s:'3 · Asesora', t:'Asesora cara a cara',
+    l:'El vendedor de terreno asesora presencialmente y arma el alta en el momento. Mismo discurso que Inbound pero in situ.',
+    tax:[['Equipo','Equipo Terreno'],['Touchpoint','Visita presencial'],['Herramienta','Notebook/tablet'],['Proveedor','Interno']],
+    fort:'La conversión más alta del journey. Permite demo presencial del SmartPOS y entrega en mano (salta etapa 5).',
+    pain:'No escala. Costo por contacto alto. Geográficamente limitado.',
+    w:['Demo del SmartPOS en el comercio','Acompaña biometría en el lugar','Entrega SmartPOS en mano']},
+
+  // ===== 4. CIERRA VENTA =====
+  'v1': {s:'4 · Cierra venta', t:'Validación biométrica',
+    l:'El comercio confirma identidad: solo (autogestionada) o asistido por Inbound o Terreno.',
+    tax:[['Equipo','Comercio + Inbound asiste'],['Touchpoint','Link/app de validación'],['Herramienta','Backoffice Bezza'],['Proveedor','Desarrollo interno']],
+    fort:'Compliance KYC. Modo asistido reduce abandono cuando hay fricción técnica.',
+    pain:'Punto frecuente de fricción: cámara, documentación, entorno. Algunos comercios abandonan acá.',
+    w:['Link/app de validación','Asistencia disponible si autogestionado falla','Oportunidad UX: reducir fricción de primer intento']},
+
+  'v2': {s:'4 · Cierra venta', t:'Elige plazo de acreditación',
+    l:'El comercio define cuándo recibe la plata: inmediato, 2, 7, 10, 15, 21, 30 o 45 días.',
+    tax:[['Equipo','Comercio decide · Sales configura'],['Touchpoint','App Bezza Pay / asesoramiento'],['Herramienta','App Bezza Pay'],['Proveedor','Desarrollo interno']],
+    fort:'**8 plazos disponibles**, mucho más flexible que MP. Diferencial real del producto.',
+    pain:'Decisión clave que hoy se toma con poca información: el comercio no entiende bien el impacto del costo asociado.',
+    w:['Diferencial fuerte vs MP','Cada plazo tiene su costo asociado','Oportunidad UX: simulador visual de plazo vs costo']},
+
+  'v3': {s:'4 · Cierra venta', t:'Carga del alta y cierre del deal',
+    l:'Sales carga el alta en el backoffice y marca el deal como ganado en HubSpot. Acto seguido se disparan los flujos automáticos: SmartPOS, Emblue y CS.',
+    tax:[['Equipo','Sales (Inbound o Terreno)'],['Touchpoint','Backend'],['Herramientas','Backoffice Bezza + HubSpot'],['Proveedor','Interno + HubSpot']],
+    fort:'Centro neurálgico del journey. Triggerea automáticamente: envío SmartPOS vía OCASA, flujo Emblue, asignación a CS.',
+    pain:'Carga manual: si Sales se equivoca o demora, se atrasa todo el flujo posterior.',
+    w:['Carga del alta en backoffice','Cierre del deal en HubSpot','Trigger automático envío SmartPOS · Trigger Emblue · Trigger asignación CS']},
+
+  // ===== 5. ACTIVACIÓN TEMPRANA =====
+  't1': {s:'5 · Activación temprana', t:'Recibe flujo de mails',
+    l:'Apenas cierra el deal, el comercio Inbound entra a una cadena de mails que lo educa y empuja a cobrar mientras espera el SmartPOS.',
+    tax:[['Equipo','Marketing automation'],['Touchpoint','Email'],['Herramienta','Emblue'],['Proveedor','Emblue'],['Disparo','Automático']],
+    fort:'Mantiene el momentum durante el "hueco" entre el alta y la entrega del SmartPOS. Sin intervención manual.',
+    pain:'Solo email. Si el comercio no abre mails, queda fuera. No hay capa de WhatsApp en este flujo.',
+    w:['Cadena automática de bienvenida y onboarding','Tutoriales de cobro QR/link/tap','Solo audiencia Inbound (Terreno no la recibe)']},
+
+  't2': {s:'5 · Activación temprana', t:'Cobra con QR · link · tap',
+    l:'El comercio descubre que puede cobrar desde su celular sin esperar al SmartPOS. Hace su primera venta (muchas veces de prueba).',
+    tax:[['Equipo','Comercio (autogestiona)'],['Touchpoint','App Bezza Pay'],['Herramienta','App Bezza Pay'],['Proveedor','Desarrollo Bezza']],
+    fort:'Habilita facturación inmediata. Genera confianza temprana y explica el 40% que activa sin haber recibido el SmartPOS.',
+    pain:'Muchos comercios no se enteran de que pueden cobrar antes de tener el dispositivo físico.',
+    w:['Modos: QR, link de pago, tap to phone','20-30% activa en la primera semana','Solo aplica a Inbound']},
+
+  't3': {s:'5 · Activación temprana', t:'Espera entrega del SmartPOS',
+    l:'El SmartPOS está en tránsito. OCASA lo lleva al comercio. Tiempo variable.',
+    tax:[['Equipo','Ops + OCASA'],['Touchpoint','Logística domiciliaria'],['Herramienta','OCASA'],['Proveedor','OCASA (externo)'],['Costo comercio','$0']],
+    fort:'Entrega física a domicilio sin costo para el comercio.',
+    pain:'⚠️ Sin tracking visible para el comercio. Como es gratis, no reclama si no llega. Riesgo de churn silencioso. OCASA no integra con app/dashboard del comercio.',
+    w:['Tiempos variables','Sin tracking visible','Sin skin in the game económico para el comercio','Oportunidad UX: visibilidad del envío']},
+
+  // ===== 6. CS =====
+  'b1': {s:'6 · CS Bienvenida', t:'Recibe bienvenida de CS',
+    l:'CS contacta al comercio con un mensaje de bienvenida. Aplica a TODOS, sea Inbound o Terreno: las dos vías convergen acá.',
+    tax:[['Equipo','Customer Success'],['Touchpoint','WhatsApp / Llamada'],['Herramienta','Botmaker / Omnileads'],['Proveedor','Botmaker / Omnileads']],
+    fort:'Convergen los dos caminos. Marca el inicio formal de la relación post-venta.',
+    pain:'Contactabilidad: si el comercio no responde, queda en el limbo. CS depende de que agarren el teléfono o respondan WhatsApp.',
+    w:['Llamada o WhatsApp de bienvenida','Presenta canales de soporte (bot, ATC, CS, comercial)','Aplica a Inbound y Terreno por igual']},
+
+  'b2': {s:'6 · CS Bienvenida', t:'Configura SmartPOS y app',
+    l:'CS guía al comercio para terminar de configurar todo: vincular SmartPOS, CBU para cash out, alta de usuarios.',
+    tax:[['Equipo','CS guía + Comercio ejecuta'],['Touchpoint','App Bezza Pay + SmartPOS + Dashboard web'],['Herramienta','App + Dashboard web'],['Proveedor','Desarrollo Bezza']],
+    fort:'Resuelve la fricción técnica que muchos comercios no atraviesan solos. Diferencial humano vs MP autoservicio.',
+    pain:'Pain top reconocido: capacitación insuficiente. Muchos comercios quedan con dudas operativas.',
+    w:['Configuración del SmartPOS','CBU para cash out a Bancor (en dashboard web)','Alta de usuarios cajero y admin','Capacitación inicial sobre cobros']},
+
+  'b3': {s:'6 · CS Bienvenida', t:'Hace primera venta real',
+    l:'Objetivo central de CS: que el comercio haga su primera venta real lo antes posible. Momento de la verdad #1.',
+    tax:[['Equipo','Comercio · CS empuja'],['Touchpoint','SmartPOS / App'],['Herramienta','SmartPOS + App Bezza Pay'],['KPI','Primera venta real']],
+    fort:'65% activa en el primer mes con SmartPOS. 40% sin haberlo recibido. Datos sólidos del journey.',
+    pain:'Hay un % que activa con venta de prueba pero no vuelve a operar (zombi). No siempre detectado a tiempo.',
+    w:['65% activa en primer mes con SmartPOS','40% activa sin SmartPOS (vía app)','20-30% activa en primera semana','Seguimiento activo durante 30 días']},
+
+  // ===== 7. OPERACIÓN PLENA =====
+  'o1': {s:'7 · Operación plena', t:'Recibe primera liquidación',
+    l:'La plata cae en la cuenta Bancor del comercio según el plazo elegido. Momento de la verdad #2.',
+    tax:[['Equipo','Ops procesa · Bancor acredita'],['Touchpoint','App Bancor del comercio'],['Herramienta','Procesador interno + cuenta Bancor'],['Proveedor','Interno + Bancor']],
+    fort:'Si cae cuando dijeron, refuerza la confianza y consolida la relación. Cash out vía CBU configurado.',
+    pain:'Si falla, comparación inmediata con MP. El comercio puede no entender los plazos elegidos y reclamar.',
+    w:['Cae en cuenta Bancor según plazo elegido','Cash out vía CBU configurado','Conciliación cobrado vs acreditado puede generar consultas']},
+
+  'o2': {s:'7 · Operación plena', t:'Cobra todos los días',
+    l:'El comercio incorpora Bezza Pay a su rutina diaria de cobros. Acá se gana o se pierde la principalidad frente a MP.',
+    tax:[['Equipo','Comercio'],['Touchpoint','SmartPOS · App Bezza Pay · Dashboard web'],['Herramienta','SmartPOS + App + Dashboard'],['Frecuencia','Diaria']],
+    fort:'Cuanto más se use, más se consolida la principalidad. Múltiples modos de cobro.',
+    pain:'Convive con MP. Decisión de principalidad pasa por experiencia diaria, comodidad y reportería (donde estamos por debajo de MP).',
+    w:['Cobro: SmartPOS, QR, link, tap','Convive o reemplaza a MP según experiencia','Dashboard web con reportería más limitada que MP']},
+
+  'o3': {s:'7 · Operación plena', t:'Pide soporte ante problemas',
+    l:'Cuando algo falla, el comercio escala según el tipo de problema. Hay 4 canales disponibles.',
+    tax:[['Equipos','ATC · CS · Sales'],['Touchpoint','WhatsApp · Voz'],['Herramientas','Bot · ATC · CS · Comercial'],['Canales','4 vías paralelas']],
+    fort:'4 canales disponibles. Bot WhatsApp como primer filtro. CS para temas comerciales, ATC para transaccionales.',
+    pain:'Triage poco claro: el comercio no sabe a quién recurrir según el caso. Termina escribiéndole al comercial que le dio el alta porque "es el único que conoce".',
+    w:['Bot WhatsApp = primer filtro','ATC para transaccional / operativo','CS para comercial (aranceles, promos)','Comercial que dio el alta como vía paralela','Reclamos top: SmartPOS, contracargos, aranceles, capacitación']}
+};
+
+const popEl = document.getElementById('popover');
+const arrowEl = document.getElementById('pop-arrow');
+const contentEl = document.getElementById('pop-content');
+
+function closePop() {
+  popEl.style.display = 'none';
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.popover') && !e.target.closest('.pill')) closePop();
+});
+
+document.querySelectorAll('.pill').forEach(p => {
+  p.addEventListener('click', (e) => {
+    const d = D[p.dataset.k];
+    if (!d) return;
+    e.stopPropagation();
+    document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+
+    const tax = d.tax.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+    const what = d.w.map(x => `<li>${x}</li>`).join('');
+    const fortHtml = d.fort ? `<div class="pop-fort">💪 <strong>Fortaleza:</strong> ${d.fort}</div>` : '';
+    const painHtml = d.pain ? `<div class="pop-pain">⚠️ <strong>Pain / fricción:</strong> ${d.pain}</div>` : '';
+
+    contentEl.innerHTML = `
+      <span class="pop-tag">${d.s}</span>
+      <h4 class="pop-title">${d.t}</h4>
+      <p class="pop-lead">${d.l}</p>
+      <dl class="pop-tax">${tax}</dl>
+      <div class="pop-fortpain">${fortHtml}${painHtml}</div>
+      <div class="pop-section-title">Detalle operativo</div>
+      <ul>${what}</ul>
+    `;
+
+    popEl.style.display = 'block';
+    popEl.style.visibility = 'hidden';
+
+    requestAnimationFrame(() => {
+      const rect = p.getBoundingClientRect();
+      const popW = popEl.offsetWidth;
+      const popH = popEl.offsetHeight;
+      const margin = 12;
+
+      let left = rect.left + window.scrollX + (rect.width / 2) - (popW / 2);
+      const minLeft = window.scrollX + margin;
+      const maxLeft = window.scrollX + window.innerWidth - popW - margin;
+      if (left < minLeft) left = minLeft;
+      if (left > maxLeft) left = maxLeft;
+
+      let top = rect.bottom + window.scrollY + 12;
+      let arrowOnTop = true;
+
+      if (top + popH > window.scrollY + window.innerHeight - margin) {
+        top = rect.top + window.scrollY - popH - 12;
+        arrowOnTop = false;
+      }
+
+      popEl.style.left = left + 'px';
+      popEl.style.top = top + 'px';
+      popEl.style.visibility = 'visible';
+
+      const pillCenterX = rect.left + window.scrollX + rect.width / 2;
+      const arrowLeft = pillCenterX - left - 6;
+      arrowEl.style.left = Math.max(12, Math.min(popW - 24, arrowLeft)) + 'px';
+
+      if (arrowOnTop) {
+        arrowEl.style.top = '-7px';
+        arrowEl.style.bottom = 'auto';
+        arrowEl.style.borderLeft = '1px solid var(--border-strong)';
+        arrowEl.style.borderTop = '1px solid var(--border-strong)';
+        arrowEl.style.borderRight = 'none';
+        arrowEl.style.borderBottom = 'none';
+      } else {
+        arrowEl.style.top = 'auto';
+        arrowEl.style.bottom = '-7px';
+        arrowEl.style.borderLeft = 'none';
+        arrowEl.style.borderTop = 'none';
+        arrowEl.style.borderRight = '1px solid var(--border-strong)';
+        arrowEl.style.borderBottom = '1px solid var(--border-strong)';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
